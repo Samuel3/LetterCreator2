@@ -1,0 +1,12 @@
+{
+  "message": "hello i18n !!",
+  "menu": {
+    "language": "Language",
+    "heading": "Letter Creator",
+    "print": "Print",
+    "export": "Export as PDF",
+    "history": "History",
+    "import": "Import",
+    "foldingMarks": "Folding Marks"
+  }
+}

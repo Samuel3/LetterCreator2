@@ -1,0 +1,12 @@
+{
+  "message": "Tach i18n !!",
+  "menu": {
+    "language": "Sprache",
+    "heading": "Letter Creator",
+    "print": "Drucken",
+    "export": "Als PDF exportieren",
+    "history": "Historie",
+    "import": "Importieren",
+    "foldingMarks": "Faltmarken"
+  }
+}

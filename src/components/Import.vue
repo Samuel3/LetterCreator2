@@ -4,8 +4,6 @@
         v-model="visible"
         width="500"
     >
-
-
       <v-card>
         <v-card-title class="headline grey lighten-2">
           Import
@@ -22,7 +20,7 @@
           <v-btn
               color="primary"
               text
-              @click="visible = false"
+              @click="close"
           >
             I accept
           </v-btn>
@@ -35,7 +33,17 @@
 <script>
 export default {
   name: "Import",
-  props: ['visible']
+  data() {
+    return {
+      visible: true
+    }
+  },
+  methods: {
+    close: function () {
+      this.$emit("close")
+
+    }
+  }
 
 }
 </script>

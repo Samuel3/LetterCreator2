@@ -84,7 +84,7 @@
             Content
             <br><br>
             Greetings
-<br><br>
+            <br><br>
             Samuel Mathes
           </div>
           <v-date-picker
@@ -122,13 +122,13 @@
               <v-icon large color="accent">mdi-import</v-icon>
             </v-btn>
           </v-row>
-          <History :visible="historyVisible"/>
-          <Import :visible="importVisible"/>
+          <History v-if="historyVisible" v-on:close="closeHistoryDialog"/>
+          <Import v-if="importVisible" v-on:close="closeImportDialog"/>
           <v-snackbar
-            v-model="snackbarVisible"
-            :timeout="timeout"
+              v-model="snackbarVisible"
+              :timeout="timeout"
           >
-            {{snackBarContent}}
+            {{ snackBarContent }}
             <template v-slot:action="{ attrs }">
               <v-btn
                   color="pink"
@@ -146,7 +146,7 @@
               :timeout="timeout"
               color="red"
           >
-            {{errorSnackbar}}
+            {{ errorSnackbar }}
             <template v-slot:action="{ attrs }">
               <v-btn
                   color="white"
@@ -192,7 +192,7 @@ export default {
     "snackBarContent": "",
     "timeout": 20000,
     "errorSnackbar": false,
-    "errorSnackbarContent":"",
+    "errorSnackbarContent": "",
     "historyVisible": false,
     "importVisible": false
   }),
@@ -217,11 +217,17 @@ export default {
     displayErrorMsg(msg) {
       this.errorSnackbar = true
       this.errorSnackbarContent = msg
+    },
+    closeHistoryDialog() {
+      this.historyVisible = false
+    },
+    closeImportDialog() {
+      this.importVisible = false
     }
   },
 
   mounted() {
-    window.ipcRenderer.on("print-pdf-path", (event, args)=> {
+    window.ipcRenderer.on("print-pdf-path", (event, args) => {
       this.displayInfoMsg(`Printed to ${args}`)
     })
     window.ipcRenderer.on("print-succes", () => {
@@ -256,7 +262,7 @@ export default {
 }
 
 @media print {
-  #app > div > header, .v-card__title, .v-card__actions,.v-app-bar, .v-toolbar__content, #app > div > main > div > div > div.v-card__actions > div.v-snack.v-snack--active.v-snack--bottom.v-snack--has-background > div {
+  #app > div > header, .v-card__title, .v-card__actions, .v-app-bar, .v-toolbar__content, #app > div > main > div > div > div.v-card__actions > div.v-snack.v-snack--active.v-snack--bottom.v-snack--has-background > div {
     display: none !important;
   }
 

@@ -7,6 +7,16 @@
     "export": "Export as PDF",
     "history": "History",
     "import": "Import",
-    "foldingMarks": "Folding Marks"
+    "foldingMarks": "Folding Marks",
+    "layout": "Layout"
+  },
+  "import": {
+    "title": "Import Letter",
+    "text": "Choose a file for import"
+  },
+  "buttons": {
+    "ok": "Ok",
+    "abort": "Abort",
+    "close": "Close"
   }
 }

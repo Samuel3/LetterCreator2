@@ -7,6 +7,16 @@
     "export": "Als PDF exportieren",
     "history": "Historie",
     "import": "Importieren",
-    "foldingMarks": "Faltmarken"
+    "foldingMarks": "Faltmarken",
+    "layout": "Layout"
+  },
+  "import": {
+    "title": "Brief importieren",
+    "text": "Wählen Sie eine Datei für den Import aus"
+  },
+  "buttons": {
+    "ok": "Ok",
+    "abort": "Abbrechen",
+    "close": "Schließen"
   }
 }

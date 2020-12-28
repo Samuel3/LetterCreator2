@@ -6,11 +6,13 @@
     >
       <v-card>
         <v-card-title class="headline grey lighten-2">
-          Import
+          {{ $t('import.title') }}
         </v-card-title>
 
         <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <v-spacer></v-spacer>
+          {{ $t('import.text') }}
+          <v-file-input accept=".let" prepend-icon="mdi-email-outline" v-model="file" show-size></v-file-input>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -18,11 +20,17 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
+              text
+              @click="file=''"
+          >
+            {{ $t('buttons.abort') }}
+          </v-btn>
+          <v-btn
               color="primary"
               text
               @click="close"
           >
-            I accept
+            {{ $t('buttons.ok') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -35,13 +43,15 @@ export default {
   name: "Import",
   data() {
     return {
-      visible: true
+      visible: true,
+      file: ""
     }
   },
   methods: {
     close: function () {
-      this.$emit("close")
-
+      console.log(this.file)
+      this.$emit("close", this.file)
+      this.file = ""
     }
   }
 

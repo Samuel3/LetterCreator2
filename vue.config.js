@@ -9,6 +9,9 @@ module.exports = {
       fallbackLocale: 'en',
       localeDir: 'locales',
       enableInSFC: true
+    },
+    electronBuilder: {
+      preload: 'src/preload.js'
     }
   }
 }

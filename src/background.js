@@ -1,6 +1,6 @@
 'use strict'
 
-import {app, protocol, BrowserWindow, ipcMain, shell} from 'electron'
+import {app, protocol, BrowserWindow, ipcMain, shell, Menu} from 'electron'
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 
@@ -34,6 +34,7 @@ function createWindow() {
         }
     })
     win.maximize()
+    setMainMenu()
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
@@ -125,4 +126,46 @@ if (isDevelopment) {
             app.quit()
         })
     }
+}
+
+function setMainMenu() {
+
+    const template = [
+        {
+            label: 'File',
+            submenu: [
+                {
+                    label: 'Hello',
+                    accelerator: 'Shift+CmdOrCtrl+H',
+                    click() {
+                        console.log('Oh, hi there!')
+                    }
+                },
+                {
+                    label: 'Print'
+                },
+                {
+                    label: 'Import'
+                },
+                {
+                    label: 'Export'
+                },
+                {
+                    label: 'Close'
+                },
+            ]
+        },
+        {
+            label: 'Help',
+            submenu: [
+                {
+                    label: 'dsf',
+                    click() {
+                        console.log("Tach")
+                    }
+                }
+            ]
+        }
+    ];
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }

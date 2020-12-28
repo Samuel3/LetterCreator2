@@ -72,7 +72,35 @@
     <v-main>
       <v-card>
         <v-card-title>{{ $t('menu.heading') }}</v-card-title>
-        <v-card-text id="letter">
+        <v-card-text >
+          <v-row>
+            <v-col cols="2" id="buttons">
+              <v-spacer style="height: 10px;"></v-spacer>
+              <v-btn tile @click="foldingMarks=!foldingMarks">
+                <v-checkbox v-model="foldingMarks" @click="foldingMarks=!foldingMarks"></v-checkbox>
+                {{ $t('menu.foldingMarks') }}
+                <v-icon large color="accent" outlined>mdi-format-page-break</v-icon>
+              </v-btn>
+              <v-spacer style="height: 10px;"></v-spacer>
+              <v-select
+                  :items="layouts"
+                  :label="$t('menu.layout')"
+                  outlined
+                  v-model="selectedLayout"
+              ></v-select>
+              <v-spacer></v-spacer>
+              <v-divider class="divider"></v-divider>
+              <v-btn tile @click="importVisible=true">
+                {{ $t('menu.import') }}
+                <v-icon large color="accent">mdi-import</v-icon>
+              </v-btn>
+              <v-divider class="divider"></v-divider>
+              <v-btn tile @click="historyVisible=true">
+                {{ $t('menu.history') }}
+                <v-icon large color="accent">mdi-history</v-icon>
+              </v-btn>
+            </v-col>
+            <v-col id="letter" cols="9">
           <Address/>
           <div @click="datepickerActive=true" id="date">
             Reutlingen, den {{ formattedDate }}
@@ -97,14 +125,12 @@
           >
 
           </v-date-picker>
+              </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-row align="center" justify="space-around">
-            <v-btn tile @click="foldingMarks=!foldingMarks">
-              <v-checkbox v-model="foldingMarks" @click="foldingMarks=!foldingMarks"></v-checkbox>
-              {{ $t('menu.foldingMarks') }}
-              <v-icon large color="accent" outlined>mdi-format-page-break</v-icon>
-            </v-btn>
+
             <v-btn tile @click="print">
               {{ $t('menu.print') }}
               <v-icon large color="accent">mdi-printer</v-icon>
@@ -113,14 +139,8 @@
               {{ $t('menu.export') }}
               <v-icon large color="accent">mdi-file-pdf-outline</v-icon>
             </v-btn>
-            <v-btn tile @click="historyVisible=true">
-              {{ $t('menu.history') }}
-              <v-icon large color="accent">mdi-history</v-icon>
-            </v-btn>
-            <v-btn tile @click="importVisible=true">
-              {{ $t('menu.import') }}
-              <v-icon large color="accent">mdi-import</v-icon>
-            </v-btn>
+
+
           </v-row>
           <History v-if="historyVisible" v-on:close="closeHistoryDialog"/>
           <Import v-if="importVisible" v-on:close="closeImportDialog"/>
@@ -128,15 +148,15 @@
               v-model="snackbarVisible"
               :timeout="timeout"
           >
-            {{ snackBarContent }}
+           {{ snackBarContent }}
             <template v-slot:action="{ attrs }">
               <v-btn
                   color="pink"
                   text
                   v-bind="attrs"
-                  @click="snackbar = false"
+                  @click="snackbarVisible = false"
               >
-                Close
+                {{$t('buttons.close')}}
               </v-btn>
             </template>
           </v-snackbar>
@@ -152,9 +172,9 @@
                   color="white"
                   text
                   v-bind="attrs"
-                  @click="snackbar = false"
+                  @click="errorSnackbar = false"
               >
-                Close
+                {{$t('buttons.close')}}
               </v-btn>
             </template>
           </v-snackbar>
@@ -194,7 +214,9 @@ export default {
     "errorSnackbar": false,
     "errorSnackbarContent": "",
     "historyVisible": false,
-    "importVisible": false
+    "importVisible": false,
+    "layouts": ["DIN5008"],
+    "selectedLayout":"DIN5008"
   }),
 
   methods: {
@@ -261,6 +283,10 @@ export default {
   font-weight: bold;
 }
 
+.divider {
+  margin: 10px 0px
+}
+
 @media print {
   #app > div > header, .v-card__title, .v-card__actions, .v-app-bar, .v-toolbar__content, #app > div > main > div > div > div.v-card__actions > div.v-snack.v-snack--active.v-snack--bottom.v-snack--has-background > div {
     display: none !important;
@@ -273,6 +299,10 @@ export default {
 
   .v-card, #app > div > main > div > div {
     box-shadow: none !important;
+  }
+
+  #buttons {
+    display: none;
   }
 
 }

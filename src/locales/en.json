@@ -12,7 +12,9 @@
   },
   "import": {
     "title": "Import Letter",
-    "text": "Choose a file for import"
+    "text": "Choose a file for import",
+    "error": "The following file could not be imported: ",
+    "success": "Letter successfully imported"
   },
   "buttons": {
     "ok": "Ok",

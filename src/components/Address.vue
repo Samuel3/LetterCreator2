@@ -2,13 +2,12 @@
   <div>
     <div @click="dialog=!dialog">
       <div id="receivingBlock">
+
         <div id="sender">
           {{ sender }}
         </div>
         <div id="receiver">
-          <div v-for="line in receiver" :key="line">
-            {{ line }}
-          </div>
+          <div v-html="receiver"></div>
         </div>
       </div>
     </div>
@@ -32,10 +31,9 @@
 export default {
   name: "Address",
   data: () => ({
-    dialog: false,
-    sender: "Samuel Mathes - Brucknerstr. 28 - 72766 Reutlingen",
-    receiver: ["Samuel Mathes", "Brucknerstr. 28", "72766 Reutlingen"]
-  })
+    dialog: false
+  }),
+  props: ['sender', 'receiver']
 }
 </script>
 

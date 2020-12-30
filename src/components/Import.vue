@@ -21,7 +21,7 @@
           <v-spacer></v-spacer>
           <v-btn
               text
-              @click="file=''"
+              @click="abort"
           >
             {{ $t('buttons.abort') }}
           </v-btn>
@@ -44,14 +44,17 @@ export default {
   data() {
     return {
       visible: true,
-      file: ""
+      file: null
     }
   },
   methods: {
     close: function () {
-      console.log(this.file)
       this.$emit("close", this.file)
-      this.file = ""
+      this.file = null
+    },
+    abort: function () {
+      this.$emit("abort")
+      this.file = null
     }
   }
 

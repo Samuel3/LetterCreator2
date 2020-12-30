@@ -12,7 +12,9 @@
   },
   "import": {
     "title": "Brief importieren",
-    "text": "Wählen Sie eine Datei für den Import aus"
+    "text": "Wählen Sie eine Datei für den Import aus",
+    "error": "Folgende Datei konnte nicht importiert werden: ",
+    "success": "Brief erfolgreich importiert"
   },
   "buttons": {
     "ok": "Ok",

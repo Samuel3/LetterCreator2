@@ -11,7 +11,11 @@ module.exports = {
       enableInSFC: true
     },
     electronBuilder: {
-      preload: 'src/preload.js'
+      preload: 'src/preload.js',
+      files: ["src/preload.js"],
+      win: {
+        icon: "src/assets/logo.png"
+      }
     }
   }
 }

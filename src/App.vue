@@ -72,12 +72,13 @@
     <v-main>
       <v-card>
         <v-card-title>{{ $t('menu.heading') }}</v-card-title>
-        <v-card-text >
+        <v-card-text>
           <v-row>
             <v-col cols="2" id="buttons">
               <v-spacer style="height: 10px;"></v-spacer>
-              <v-btn tile @click="foldingMarks=!foldingMarks">
-                <v-checkbox v-model="foldingMarks" @click="foldingMarks=!foldingMarks"></v-checkbox>
+              <v-btn tile @click="letter.foldingMarks=!letter.foldingMarks">
+                <v-checkbox v-model="letter.foldingMarks"
+                            @click="letter.foldingMarks=!letter.foldingMarks"></v-checkbox>
                 {{ $t('menu.foldingMarks') }}
                 <v-icon large color="accent" outlined>mdi-format-page-break</v-icon>
               </v-btn>
@@ -101,31 +102,48 @@
               </v-btn>
             </v-col>
             <v-col id="letter" cols="9">
-          <Address/>
-          <div @click="datepickerActive=true" id="date">
-            Reutlingen, den {{ formattedDate }}
-          </div>
-          <div id="subject" contenteditable="true" class="font-weight-bold">
-            Betreff:
-          </div>
-          <div id="letter-content" contenteditable="true">
-            Content
-            <br><br>
-            Greetings
-            <br><br>
-            Samuel Mathes
-          </div>
-          <v-date-picker
-              v-if="datepickerActive"
-              v-model="date"
-              locale="de-de"
-              @input="formattedDate=formatDate(date);datepickerActive=false"
-              :first-day-of-week="1"
-              @blur="formattedDate=formatDate(date)"
-          >
+              <Address :sender="letter.sender" :receiver="letter.receiver"/>
+              <div @click="datepickerActive=true" id="date">
+                {{ letter.place }} {{ formattedDate }}
+              </div>
+              <v-dialog v-model="datepickerActive" width="350">
+                <v-card>
+                  <v-toolbar>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      icon
+                      dark
+                      @click="datepickerActive=false"
+                    >
+                      <v-icon color="primary">mdi-close</v-icon>
+                    </v-btn>
+                  </v-toolbar>
+                  <v-card-text>
+                    <v-date-picker
+                        v-if="datepickerActive"
+                        v-model="date"
+                        locale="de-de"
+                        @input="formattedDate=formatDate(date);datepickerActive=false"
+                        :first-day-of-week="1"
+                        @blur="formattedDate=formatDate(date)"
+                    >
+                    </v-date-picker>
+                  </v-card-text>
+                  <v-card-actions>
 
-          </v-date-picker>
-              </v-col>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <div id="subject" contenteditable="true" class="font-weight-bold">
+                {{ letter.subject }}
+              </div>
+              <div id="letter-content" contenteditable="true">
+                <div v-html="letter.content"></div>
+                <br><br>
+                <div v-html="letter.greeting"></div>
+              </div>
+
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
@@ -143,12 +161,12 @@
 
           </v-row>
           <History v-if="historyVisible" v-on:close="closeHistoryDialog"/>
-          <Import v-if="importVisible" v-on:close="closeImportDialog"/>
+          <Import v-if="importVisible" v-on:close="closeImportDialog" v-on:abort="abortImportDialog"/>
           <v-snackbar
               v-model="snackbarVisible"
               :timeout="timeout"
           >
-           {{ snackBarContent }}
+            {{ snackBarContent }}
             <template v-slot:action="{ attrs }">
               <v-btn
                   color="pink"
@@ -156,7 +174,7 @@
                   v-bind="attrs"
                   @click="snackbarVisible = false"
               >
-                {{$t('buttons.close')}}
+                {{ $t('buttons.close') }}
               </v-btn>
             </template>
           </v-snackbar>
@@ -166,7 +184,7 @@
               :timeout="timeout"
               color="red"
           >
-            {{ errorSnackbar }}
+            {{ errorSnackbarContent }}
             <template v-slot:action="{ attrs }">
               <v-btn
                   color="white"
@@ -174,7 +192,7 @@
                   v-bind="attrs"
                   @click="errorSnackbar = false"
               >
-                {{$t('buttons.close')}}
+                {{ $t('buttons.close') }}
               </v-btn>
             </template>
           </v-snackbar>
@@ -204,7 +222,6 @@ export default {
     drawer: false,
     foo: false,
     group: null,
-    foldingMarks: false,
     date: new Date().toISOString().substr(0, 10),
     formattedDate: vm.formatDate(new Date().toISOString().substr(0, 10)),
     "datepickerActive": false,
@@ -216,7 +233,17 @@ export default {
     "historyVisible": false,
     "importVisible": false,
     "layouts": ["DIN5008"],
-    "selectedLayout":"DIN5008"
+    "selectedLayout": "DIN5008",
+    "letter": {
+      "sender": "Samuel Mathes - Brucknerstr. 28 - 72766 Reutlingen",
+      "receiver": "Doppelklicken, um Empfänger hinzuzufügen<br><br>",
+      "place": "Reutlingen, den",
+      "date": vm.formatDate(new Date().toISOString().substr(0, 10)),
+      "foldingMarks": false,
+      "subject": "Betreff: ",
+      "content": "Content",
+      "greeting": "Grüße <br><br>Samuel Mathes"
+    }
   }),
 
   methods: {
@@ -243,7 +270,25 @@ export default {
     closeHistoryDialog() {
       this.historyVisible = false
     },
-    closeImportDialog() {
+    closeImportDialog(file) {
+      try {
+        if (null != file) {
+          let data = window.fs.readFileSync(file.path, {encoding: "utf8", flag: "r"})
+          let parsedData = JSON.parse(data)
+          this.letter = parsedData
+          this.displayInfoMsg(this.$t('import.success'))
+          let date = parsedData.date
+          let [day, month, year] = date.split(".")
+          this.date = new Date(Date.parse(`${year}-${month}-${day}`)).toISOString().substr(0, 10)
+          this.formattedDate = this.formatDate(this.date)
+        }
+      } catch (e) {
+        this.displayErrorMsg(this.$t('import.error') + file.path)
+      } finally {
+        this.importVisible = false;
+      }
+    },
+    abortImportDialog() {
       this.importVisible = false
     }
   },

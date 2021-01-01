@@ -1,5 +1,9 @@
 <template>
   <div class="text-center">
+    <v-btn tile @click="visible=true">
+      {{ $t('menu.import') }}
+      <v-icon large color="accent">mdi-import</v-icon>
+    </v-btn>
     <v-dialog
         v-model="visible"
         width="500"
@@ -43,7 +47,7 @@ export default {
   name: "Import",
   data() {
     return {
-      visible: true,
+      visible: false,
       file: null
     }
   },
@@ -51,13 +55,13 @@ export default {
     close: function () {
       this.$emit("close", this.file)
       this.file = null
+      this.visible=false
     },
     abort: function () {
-      this.$emit("abort")
       this.file = null
+      this.visible=false
     }
   }
-
 }
 </script>
 

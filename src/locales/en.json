@@ -20,5 +20,8 @@
     "ok": "Ok",
     "abort": "Abort",
     "close": "Close"
+  },
+  "address": {
+    "title": "Address Management"
   }
 }

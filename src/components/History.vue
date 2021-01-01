@@ -1,5 +1,9 @@
 <template>
   <div class="text-center">
+    <v-btn tile @click="visible=true">
+      {{ $t('menu.history') }}
+      <v-icon large color="accent">mdi-history</v-icon>
+    </v-btn>
     <v-dialog
         v-model="visible"
         @click="close"
@@ -41,13 +45,13 @@ export default {
   name: "History",
   data() {
     return {
-      visible: true
+      visible: false
     }
   },
   methods: {
     close: function () {
       this.$emit("close")
-
+      this.visible=false
     }
   }
 }

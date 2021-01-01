@@ -91,15 +91,9 @@
               ></v-select>
               <v-spacer></v-spacer>
               <v-divider class="divider"></v-divider>
-              <v-btn tile @click="importVisible=true">
-                {{ $t('menu.import') }}
-                <v-icon large color="accent">mdi-import</v-icon>
-              </v-btn>
+              <Import v-on:close="closeImportDialog"/>
               <v-divider class="divider"></v-divider>
-              <v-btn tile @click="historyVisible=true">
-                {{ $t('menu.history') }}
-                <v-icon large color="accent">mdi-history</v-icon>
-              </v-btn>
+              <History v-on:close="closeHistoryDialog"/>
             </v-col>
             <v-col id="letter" cols="9">
               <Address :sender="letter.sender" :receiver="letter.receiver"/>
@@ -111,9 +105,9 @@
                   <v-toolbar>
                     <v-spacer></v-spacer>
                     <v-btn
-                      icon
-                      dark
-                      @click="datepickerActive=false"
+                        icon
+                        dark
+                        @click="datepickerActive=false"
                     >
                       <v-icon color="primary">mdi-close</v-icon>
                     </v-btn>
@@ -157,11 +151,7 @@
               {{ $t('menu.export') }}
               <v-icon large color="accent">mdi-file-pdf-outline</v-icon>
             </v-btn>
-
-
           </v-row>
-          <History v-if="historyVisible" v-on:close="closeHistoryDialog"/>
-          <Import v-if="importVisible" v-on:close="closeImportDialog" v-on:abort="abortImportDialog"/>
           <v-snackbar
               v-model="snackbarVisible"
               :timeout="timeout"
@@ -230,8 +220,6 @@ export default {
     "timeout": 20000,
     "errorSnackbar": false,
     "errorSnackbarContent": "",
-    "historyVisible": false,
-    "importVisible": false,
     "layouts": ["DIN5008"],
     "selectedLayout": "DIN5008",
     "letter": {
@@ -268,7 +256,7 @@ export default {
       this.errorSnackbarContent = msg
     },
     closeHistoryDialog() {
-      this.historyVisible = false
+      console.log("Close History")
     },
     closeImportDialog(file) {
       try {
@@ -284,12 +272,7 @@ export default {
         }
       } catch (e) {
         this.displayErrorMsg(this.$t('import.error') + file.path)
-      } finally {
-        this.importVisible = false;
       }
-    },
-    abortImportDialog() {
-      this.importVisible = false
     }
   },
 

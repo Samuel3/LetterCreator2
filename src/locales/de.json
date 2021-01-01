@@ -20,5 +20,8 @@
     "ok": "Ok",
     "abort": "Abbrechen",
     "close": "Schließen"
+  },
+  "address": {
+    "title": "Adressverwaltung"
   }
 }

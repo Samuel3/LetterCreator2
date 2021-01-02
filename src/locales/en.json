@@ -22,6 +22,23 @@
     "close": "Close"
   },
   "address": {
-    "title": "Address Management"
+    "title": "Address Management",
+    "search": "Search",
+    "headers": {
+      "salutation": "Salutation",
+      "title": "Title",
+      "name": "Name",
+      "surname": "Surname",
+      "company": "Company",
+      "department": "Department",
+      "street": "Street",
+      "zip": "Zip Code",
+      "place": "City",
+      "country": "Country"
+    },
+    "buttons": {
+      "edit": "Edit",
+      "save": "Save"
+    }
   }
 }

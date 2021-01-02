@@ -14,7 +14,7 @@ module.exports = {
       preload: 'src/preload.js',
       files: ["src/preload.js"],
       win: {
-        icon: "src/assets/logo.png"
+        icon: "build/Icon.ico"
       }
     }
   }

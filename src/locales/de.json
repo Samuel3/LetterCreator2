@@ -22,6 +22,23 @@
     "close": "Schließen"
   },
   "address": {
-    "title": "Adressverwaltung"
+    "title": "Adressverwaltung",
+    "search": "Suche",
+    "header": {
+      "salutation": "Anrede",
+      "title": "Titel",
+      "name": "Vorname",
+      "surname": "Nachname",
+      "company": "Firma",
+      "department": "Abteilung",
+      "street": "Straße",
+      "zip": "PLZ",
+      "city": "Ort",
+      "country": "Land"
+    },
+    "buttons": {
+      "edit": "Bearbeiten",
+      "save": "Speichern"
+    }
   }
 }

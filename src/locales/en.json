@@ -36,9 +36,14 @@
       "place": "City",
       "country": "Country"
     },
+    "texts": {
+      "editEntry": "Edit Entry"
+    },
     "buttons": {
       "edit": "Edit",
-      "save": "Save"
+      "save": "Save",
+      "new": "New Entry",
+      "delete": "Are you sure you want to delete this item?"
     }
   }
 }

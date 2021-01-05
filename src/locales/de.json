@@ -36,9 +36,14 @@
       "city": "Ort",
       "country": "Land"
     },
+    "texts": {
+      "editEntry": "Eintrag bearbeiten",
+      "new": "Neuer Eintrag"
+    },
     "buttons": {
       "edit": "Bearbeiten",
-      "save": "Speichern"
+      "save": "Speichern",
+      "delete": "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
     }
   }
 }

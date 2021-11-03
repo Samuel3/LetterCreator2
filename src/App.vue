@@ -28,7 +28,7 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-      <LangChooser/>
+      <LangChooser :language="lang"/>
     </v-navigation-drawer>
 
     <v-app-bar
@@ -96,9 +96,13 @@
               <History v-on:close="closeHistoryDialog"/>
             </v-col>
             <v-col id="letter" cols="9">
-              <Address :sender="letter.sender" :receiver="letter.receiver"/>
-              <div @click="datepickerActive=true" id="date">
-                {{ letter.place }} {{ formattedDate }}
+              <Sender :sender="letter.sender"/>
+              <Address :receiver="letter.receiver"/>
+              <div id="date">
+                <div id="place" contenteditable="true"> {{ letter.place }}</div>
+                <div @click="datepickerActive=true">
+                  {{ formattedDate }}
+                </div>
               </div>
               <v-dialog v-model="datepickerActive" width="350">
                 <v-card>
@@ -197,11 +201,13 @@ import LangChooser from './components/LangChooser';
 import Address from "@/components/Address";
 import History from "@/components/History";
 import Import from "@/components/Import";
+import Sender from "@/components/Sender";
 
 export default {
   name: 'App',
 
   components: {
+    Sender,
     Import,
     History,
     Address,
@@ -211,6 +217,7 @@ export default {
   data: vm => ({
     drawer: false,
     foo: false,
+    lang: 'ru',
     group: null,
     date: new Date().toISOString().substr(0, 10),
     formattedDate: vm.formatDate(new Date().toISOString().substr(0, 10)),
@@ -277,9 +284,14 @@ export default {
   },
 
   mounted() {
+    window.ipcRenderer.send('read', 'app.language')
     window.ipcRenderer.on("print-pdf-path", (event, args) => {
       this.displayInfoMsg(`Printed to ${args}`)
     })
+    window.ipcRenderer.on("app.language", (event, args) => {
+      console.log("Received response for app.language " + args)
+      this.lang = args
+    });
     window.ipcRenderer.on("print-succes", () => {
       this.displayInfoMsg("Printed successfully")
     });
@@ -295,6 +307,7 @@ export default {
   border: 1px solid;
   margin: 25px;
   width: 98%;
+  color: black;
 }
 
 #letter-content {
@@ -304,6 +317,11 @@ export default {
 
 #date {
   float: right;
+  display: flex;
+}
+
+#place {
+  padding-right: 0.25em;
 }
 
 #subject {

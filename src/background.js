@@ -9,6 +9,12 @@ const fs = require('fs')
 const path = require('path')
 const os = require('os')
 
+const Store = require('electron-store');
+
+const store = new Store();
+
+store.set('unicorn', '🦄');
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -29,7 +35,6 @@ function createWindow() {
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             preload: path.join(__dirname, 'preload.js')
-
 
         }
     })
@@ -67,6 +72,17 @@ app.on('activate', () => {
         createWindow()
     }
 })
+
+ipcMain.on('write', (e, key, value) => {
+    console.log("Key: " + key + " Value: " + value)
+    store.set(key, value)
+})
+
+ipcMain.on('read', (e, key) => {
+    console.log("Received read event for " + key)
+    win.webContents.send(key, store.get(key))
+    win.webContents.send("read", store.get(key))
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

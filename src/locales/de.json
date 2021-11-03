@@ -38,7 +38,11 @@
     },
     "texts": {
       "editEntry": "Eintrag bearbeiten",
-      "new": "Neuer Eintrag"
+      "new": "Neuer Eintrag",
+      "noEntrySelected": "Es wurde kein Eintrag ausgewählt. Wählen Sie bitte einem Empfänger aus.",
+      "search": "Suche",
+      "addressPerPage": "Adressen / Seite",
+      "all": "Alle"
     },
     "buttons": {
       "edit": "Bearbeiten",

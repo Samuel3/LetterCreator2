@@ -37,7 +37,12 @@
       "country": "Country"
     },
     "texts": {
-      "editEntry": "Edit Entry"
+      "editEntry": "Edit Entry",
+      "new": "New Entry",
+      "noEntrySelected": "No entry selected. Please select an entry.",
+      "search": "Search",
+      "addressPerPage": "Addresses / Page",
+      "all": "All"
     },
     "buttons": {
       "edit": "Edit",

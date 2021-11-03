@@ -1,12 +1,9 @@
 <template>
   <div>
-    <div @click="application=!application">
+    <div>
       <div id="receivingBlock">
-        <div id="sender">
-          {{ sender }}
-        </div>
-        <div id="receiver">
-          <div v-html="receiver"></div>
+        <div id="receiver" @click="application=!application">
+          <div v-html="renderedReceiver"></div>
         </div>
       </div>
     </div>
@@ -16,10 +13,18 @@
           <v-card-text>
             <v-data-table
                 show-select
-                :single-select="false"
+                :single-select="true"
                 :headers="headers"
                 :items="addresses"
                 :search="search"
+                :footer-props="{
+                   'items-per-page-text': $t('address.texts.addressPerPage'),
+                   'items-per-page-options': [-1,5,10],
+                   'options': {
+                     'itemsPerPage': -1
+                   },
+                   'items-per-page-all-text': $t('address.texts.all')
+                }"
             >
               <template v-slot:top>
                 <v-toolbar
@@ -35,7 +40,7 @@
                   <v-text-field
                       v-model="search"
                       append-icon="mdi-magnify"
-                      label="Search"
+                      :label="$t('address.texts.search')"
                       single-line
                       hide-details
                   ></v-text-field>
@@ -161,7 +166,7 @@
               </template>
               <template v-slot:body="{ items, headers }">
                 <tbody>
-                <tr v-for="(item,idx) in items" :key="idx">
+                <tr v-for="(item,idx) in items" :key="idx" @click="selectItem(idx)">
                   <td v-for="(header,key) in headers" :key="key">
                     <div v-if="!(key==0||key==11)">
                       <v-edit-dialog
@@ -184,7 +189,10 @@
                       </v-edit-dialog>
                     </div>
                     <div v-if="key==0">
-                      <v-checkbox></v-checkbox>
+                      <v-checkbox
+                          v-model="item.checked"
+                          @click="selectItem(idx)"
+                      ></v-checkbox>
                     </div>
                     <div v-if="key==11">
                       <v-icon
@@ -208,7 +216,21 @@
               </template>
 
             </v-data-table>
-
+            <v-snackbar
+                v-model="snackbar"
+            >
+              {{ $t('address.texts.noEntrySelected') }}
+              <template v-slot:action="{ attrs }">
+                <v-btn
+                    color="pink"
+                    text
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                >
+                  {{ $t('buttons.close') }}
+                </v-btn>
+              </template>
+            </v-snackbar>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -221,7 +243,7 @@
             <v-btn
                 color="primary"
                 text
-                @click="application=false"
+                @click="closeAndApply"
             >
               {{ $t('buttons.ok') }}
             </v-btn>
@@ -234,10 +256,14 @@
 </template>
 
 <script>
+
+
 export default {
   name: "Address",
   data: vm => ({
+    renderedReceiver: "Samuel Mathes <br>Brucknerstr. 28 <br>72766 Reutlingen",
     application: false,
+    snackbar: false,
     dialog: false,
     search: "",
     headers: [
@@ -254,8 +280,8 @@ export default {
       {text: 'Actions', value: 'actions', sortable: false}
     ],
     addresses: [{
-      salutation: "Herr",
-      title: "",
+      "salutation": "Herr",
+      "title": "",
       "name": "Max",
       "surname": "Mustermann",
       "company": "Musterfirma",
@@ -263,7 +289,20 @@ export default {
       "street": "Musterstraße",
       "city": "Musterstadt",
       "zip": "12345",
-      "country": "Musterland"
+      "country": "Musterland",
+      "checked": false
+    }, {
+      "salutation": "Frau",
+      "title": "",
+      "name": "Maxime",
+      "surname": "Musterfrau",
+      "company": "Musterfirma",
+      "department": "Musterabteilung",
+      "street": "Musterstraße",
+      "city": "Musterstadt",
+      "zip": "12345",
+      "country": "Musterland",
+      "checked": false
     }],
     editedIndex: -1,
     editedItem: {
@@ -283,7 +322,7 @@ export default {
     dialogDelete: false,
     max25chars: v => v.length <= 25 || 'Input too long!',
   }),
-  props: ['sender', 'receiver'],
+  props: ['receiver'],
   methods: {
 
     cancel() {
@@ -326,14 +365,68 @@ export default {
       })
     },
 
+    closeAndApply() {
+      let checkedItem = this.addresses.filter((it) => it.checked)
+      if (checkedItem.length != 0) {
+        this.application = false
+        this.renderedReceiver = this.getFormattedAddress(checkedItem[0])
+      } else {
+        this.snackbar = true
+      }
+    },
+
     save() {
+      this.addresses.forEach((it) => {
+        it.checked = false
+      })
       if (this.editedIndex > -1) {
         Object.assign(this.addresses[this.editedIndex], this.editedItem)
+        this.addresses[this.editedIndex].checked = true
       } else {
         this.addresses.push(this.editedItem)
+        this.addresses[this.addresses.length -1].checked = true
       }
       this.close()
     },
+
+    selectItem(index) {
+      let oldState = this.addresses[index].checked
+      this.addresses.forEach((it) => {
+        it.checked = false
+      })
+      if (oldState) {
+        this.addresses[index].checked = true
+      }
+    },
+
+    getFormattedAddress(item) {
+      let name = item.salutation + " "
+      if (item.title && item.title.length > 0) {
+        name += item.title + " "
+      }
+      name += item.name + " " + item.surname + "<br>";
+      let formattedAdress = ""
+      if (name.length && name.length > 0) {
+        formattedAdress += name
+      }
+      if (item.department && item.department.length > 0) {
+        formattedAdress += `${item.department}<br>`
+      }
+      if (item.company && item.company.length > 0) {
+        formattedAdress += `${item.company}<br>`
+      }
+      if (item.street && item.street.length > 0) {
+        formattedAdress += `${item.street}<br>`
+      }
+      formattedAdress += `${item.zip || ""} ${item.city || ""}<br>`;
+      if (item.country && item.country.length > 0) {
+        formattedAdress += item.country
+      }
+      return formattedAdress
+    },
+    updateReceiver(newReiver) {
+      this.renderedReceiver = newReiver
+    }
   },
   computed: {
     formTitle() {
@@ -349,17 +442,15 @@ export default {
       return this.headers.slice(6, 10)
     }
   },
+  watch: {
+    'receiver': function (newReceiver) {
+      this.updateReceiver(newReceiver)
+    }
+  }
 
 }
 </script>
 
 <style scoped>
-#receivingBlock {
 
-}
-
-#sender {
-  text-decoration: underline;
-  font-size: 10px;
-}
 </style>

@@ -144,9 +144,8 @@
             </v-col>
           </v-row>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions style="height:5rem">
           <v-row align="center" justify="space-around">
-
             <v-btn tile @click="print">
               {{ $t('menu.print') }}
               <v-icon large color="accent">mdi-printer</v-icon>

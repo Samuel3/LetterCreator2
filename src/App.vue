@@ -77,8 +77,7 @@
             <v-col cols="2" id="buttons">
               <v-spacer style="height: 10px;"></v-spacer>
               <v-btn tile @click="letter.foldingMarks=!letter.foldingMarks">
-                <v-checkbox v-model="letter.foldingMarks"
-                            @click="letter.foldingMarks=!letter.foldingMarks"></v-checkbox>
+                <v-checkbox v-model="letter.foldingMarks" @click="letter.foldingMarks=!letter.foldingMarks"></v-checkbox>
                 {{ $t('menu.foldingMarks') }}
                 <v-icon large color="accent" outlined>mdi-format-page-break</v-icon>
               </v-btn>
@@ -135,12 +134,14 @@
               <div id="subject" contenteditable="true" class="font-weight-bold">
                 {{ letter.subject }}
               </div>
+              <div id="foldingMark1" v-if="letter.foldingMarks" class="foldingMarks"></div>
+              <div id="foldingMark2" v-if="letter.foldingMarks" class="foldingMarks"></div>
+              <div id="foldingMark3" v-if="letter.foldingMarks" class="foldingMarks"></div>
               <div id="letter-content" contenteditable="true">
                 <div v-html="letter.content"></div>
                 <br><br>
                 <div v-html="letter.greeting"></div>
               </div>
-
             </v-col>
           </v-row>
         </v-card-text>
@@ -311,7 +312,6 @@ export default {
 
 #letter-content {
   margin-top: 2em;
-
 }
 
 #date {
@@ -332,13 +332,28 @@ export default {
   margin: 10px 0px
 }
 
+#date {
+  margin-top: 4rem;
+}
+
+.foldingMarks {
+  border-top: 1px solid;
+  height: 1px;
+  width: 50px;
+  position: absolute;
+}
+
 @media print {
   #app > div > header, .v-card__title, .v-card__actions, .v-app-bar, .v-toolbar__content, #app > div > main > div > div > div.v-card__actions > div.v-snack.v-snack--active.v-snack--bottom.v-snack--has-background > div {
     display: none !important;
   }
 
   #letter {
-    border: none;
+    border: 1px solid;
+    width: 100%;
+    margin-left: 25mm;
+    margin-right: 20mm;
+    padding: 0px;
     box-shadow: none;
   }
 
@@ -350,5 +365,33 @@ export default {
     display: none;
   }
 
+  #date {
+    margin-top: 4rem;
+    right: 0px;
+    position: absolute;
+  }
+
+  #subject {
+    margin-top: 9rem;
+  }
+
+  .foldingMarks {
+    position: absolute;
+    left: 0px;
+    padding-left: 0px;
+    width: 30px;
+  }
+
+  #foldingMark1 {
+    top: 87mm;
+  }
+
+  #foldingMark2 {
+    top: 148.5mm;
+  }
+
+  #foldingMark3 {
+    top: 192mm;
+  }
 }
 </style>

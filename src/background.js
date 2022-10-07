@@ -105,7 +105,8 @@ ipcMain.on("print-pdf", () => {
     win.webContents.printToPDF({
         pageSize: 'A4',
         printSelectionOnly: false,
-        printBackground: false
+        printBackground: false,
+        marginsType: 1
     }).then(data => {
 
         fs.writeFile(pdfPath, data, (error) => {

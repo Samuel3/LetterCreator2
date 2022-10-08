@@ -96,7 +96,7 @@
             </v-col>
             <v-col id="letter" cols="9">
               <Sender :sender="letter.sender"/>
-              <Address :receiver="letter.receiver"/>
+              <AddressComponent :receiver="letter.receiver"/>
               <div id="date">
                 <div id="place" contenteditable="true"> {{ letter.place }}</div>
                 <div @click="datepickerActive=true">
@@ -198,7 +198,7 @@
 
 <script>
 import LangChooser from './components/LangChooser';
-import Address from "@/components/Address";
+import AddressComponent from "@/components/AddressComponent";
 import History from "@/components/History";
 import Import from "@/components/Import";
 import Sender from "@/components/Sender";
@@ -210,7 +210,7 @@ export default {
     Sender,
     Import,
     History,
-    Address,
+    AddressComponent,
     LangChooser
   },
 

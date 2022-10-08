@@ -141,21 +141,6 @@
                   </v-dialog>
                 </v-toolbar>
               </template>
-              <template v-slot:item.actions="{ item }">
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
-                >
-                  mdi-pencil
-                </v-icon>
-                <v-icon
-                    small
-                    @click="deleteItem(item)"
-                >
-                  mdi-delete
-                </v-icon>
-              </template>
               <template v-slot:no-data>
                 <v-btn
                     color="primary"
@@ -259,7 +244,7 @@
 
 
 export default {
-  name: "Address",
+  name: "AddressComponent",
   data: vm => ({
     renderedReceiver: "Samuel Mathes <br>Brucknerstr. 28 <br>72766 Reutlingen",
     application: false,

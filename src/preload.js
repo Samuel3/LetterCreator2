@@ -1,5 +1,7 @@
-const { ipcRenderer } = require('electron')
-const fs = require("fs")
+const { contextBridge, ipcRenderer } = require('electron')
 
-window.ipcRenderer = ipcRenderer
-window.fs = fs
+contextBridge.exposeInMainWorld('electronAPI', {
+    send: (message, args) => ipcRenderer.send(message, ...args),
+    sendStringMessage: (message, args) => ipcRenderer.send(message, args),
+    on: (channel, listener) => ipcRenderer.on(channel, listener)
+})

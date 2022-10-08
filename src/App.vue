@@ -249,10 +249,10 @@ export default {
       return `${day}.${month}.${year}`
     },
     printToPdf() {
-      window.ipcRenderer.send("print-pdf")
+      window.electronAPI.send("print-pdf")
     },
     print() {
-      window.ipcRenderer.send("print")
+      window.electronAPI.send("print")
     },
     displayInfoMsg(msg) {
       this.snackbarVisible = true
@@ -268,14 +268,10 @@ export default {
     closeImportDialog(file) {
       try {
         if (null != file) {
-          let data = window.fs.readFileSync(file.path, {encoding: "utf8", flag: "r"})
-          let parsedData = JSON.parse(data)
-          this.letter = parsedData
-          this.displayInfoMsg(this.$t('import.success'))
-          let date = parsedData.date
-          let [day, month, year] = date.split(".")
-          this.date = new Date(Date.parse(`${year}-${month}-${day}`)).toISOString().substr(0, 10)
-          this.formattedDate = this.formatDate(this.date)
+          window.electronAPI.sendStringMessage('load-letter', file.path)
+          window.electronAPI.on('load-letter-failed', () => {
+            this.displayErrorMsg(this.$t('import.error') + file.path)
+          });
         }
       } catch (e) {
         this.displayErrorMsg(this.$t('import.error') + file.path)
@@ -284,19 +280,28 @@ export default {
   },
 
   mounted() {
-    window.ipcRenderer.send('read', 'app.language')
-    window.ipcRenderer.on("print-pdf-path", (event, args) => {
+    window.electronAPI.send('read', 'app.language')
+    window.electronAPI.on("print-pdf-path", (event, args) => {
       this.displayInfoMsg(`Printed to ${args}`)
     })
-    window.ipcRenderer.on("app.language", (event, args) => {
+    window.electronAPI.on("app.language", (event, args) => {
       console.log("Received response for app.language " + args)
       this.lang = args
     });
-    window.ipcRenderer.on("print-succes", () => {
+    window.electronAPI.on("print-succes", () => {
       this.displayInfoMsg("Printed successfully")
     });
-    window.ipcRenderer.on("error", (event, args) => {
+    window.electronAPI.on("error", (event, args) => {
       this.displayErrorMsg(args)
+    });
+    window.electronAPI.on("letter-loaded", (event, data) => {
+      let parsedData = JSON.parse(data)
+      this.letter = parsedData
+      this.displayInfoMsg(this.$t('import.success'))
+      let date = parsedData.date
+      let [day, month, year] = date.split(".")
+      this.date = new Date(Date.parse(`${year}-${month}-${day}`)).toISOString().substr(0, 10)
+      this.formattedDate = this.formatDate(this.date)
     });
   }
 };

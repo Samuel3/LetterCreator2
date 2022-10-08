@@ -35,7 +35,6 @@ function createWindow() {
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             preload: path.join(__dirname, 'preload.js')
-
         }
     })
     win.maximize()
@@ -44,7 +43,9 @@ function createWindow() {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-        if (!process.env.IS_TEST) win.webContents.openDevTools()
+        if (!process.env.IS_TEST) {
+            win.webContents.openDevTools()
+        }
     } else {
         createProtocol('app')
         // Load the index.html when not in development
@@ -74,15 +75,16 @@ app.on('activate', () => {
 })
 
 ipcMain.on('write', (e, key, value) => {
+    // console.log(arguments)
     console.log("Key: " + key + " Value: " + value)
     store.set(key, value)
 })
 
-ipcMain.on('read', (e, key) => {
-    console.log("Received read event for " + key)
-    win.webContents.send(key, store.get(key))
-    win.webContents.send("read", store.get(key))
-});
+// ipcMain.on('read', (e, key) => {
+//     console.log("Received read event for " + key)
+//     win.webContents.send(key, store.get(key))
+//     win.webContents.send("read", store.get(key))
+// });
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -99,7 +101,7 @@ app.on('ready', async () => {
     createWindow()
 })
 
-ipcMain.on("print-pdf", () => {
+ipcMain.on('print-pdf', () => {
     console.log("Receiving print request")
     const pdfPath = path.join(os.homedir(), 'Desktop', 'temp.pdf')
     win.webContents.printToPDF({
@@ -108,7 +110,6 @@ ipcMain.on("print-pdf", () => {
         printBackground: false,
         marginsType: 1
     }).then(data => {
-
         fs.writeFile(pdfPath, data, (error) => {
             if (error) throw error
             console.log(`Wrote PDF successfully to ${pdfPath}`)
@@ -119,6 +120,12 @@ ipcMain.on("print-pdf", () => {
         console.log(`Failed to write PDF to ${pdfPath}: `, error)
     })
 })
+
+ipcMain.on('load-letter', (event, path) => {
+    fs.readFile(path, {encoding: 'utf-8'}, function (err, data) {
+        win.webContents.send("letter-loaded", data)
+    });
+});
 
 ipcMain.on("print", () => {
     win.webContents.print({}, (success, failureReason)=>{

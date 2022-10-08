@@ -27,16 +27,10 @@ export default {
   methods: {
     changeLang(lang) {
       this.$i18n.locale = lang;
-      window.ipcRenderer.send("write","app.language", lang)
+      window.electronAPI.send("write","app.language", lang)
     },
     mounted: function () {
-      window.ipcRenderer.on("print-pdf-path", (event, args) => {
-        console.log("Received print path" + JSON.stringify(args))
-      });
-      window.ipcRenderer.on("app.language", (event, args) => {
-        console.log("Received response for app.language dsf " + args)
-      });
-      window.ipcRenderer.send('read', 'app.language')
+
     }
 
   },

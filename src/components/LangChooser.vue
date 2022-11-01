@@ -17,6 +17,7 @@
 <script>
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "i18n",
   data: () => ({
     languages: ['de', 'en']

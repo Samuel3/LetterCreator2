@@ -249,10 +249,10 @@ export default {
       return `${day}.${month}.${year}`
     },
     printToPdf() {
-      window.electronAPI.send("print-pdf")
+      window.electronAPI.sendPlain("print-pdf")
     },
     print() {
-      window.electronAPI.send("print")
+      window.electronAPI.sendPlain("print")
     },
     displayInfoMsg(msg) {
       this.snackbarVisible = true
@@ -349,8 +349,29 @@ export default {
 }
 
 @media print {
+  @page  {
+    size: A4;
+    margin-left: 0cm;
+    margin-top: 0px !important;
+  }
+
   #app > div > header, .v-card__title, .v-card__actions, .v-app-bar, .v-toolbar__content, #app > div > main > div > div > div.v-card__actions > div.v-snack.v-snack--active.v-snack--bottom.v-snack--has-background > div {
     display: none !important;
+  }
+
+  #sender {
+    width: 80mm;
+    min-width: 80mm;
+    border-bottom: 1px solid;
+    text-align: center;
+    vertical-align: sub;
+    padding-bottom: 0px;
+    border-bottom: 0px;
+  }
+
+  #receiver {
+    padding-top: 2rem;
+    line-height: normal;
   }
 
   #letter {
@@ -360,6 +381,7 @@ export default {
     margin-right: 20mm;
     padding: 0px;
     box-shadow: none;
+    background-color: red;
   }
 
   .v-card, #app > div > main > div > div {

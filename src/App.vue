@@ -79,7 +79,7 @@
               <v-btn tile @click="letter.foldingMarks=!letter.foldingMarks">
                 <v-checkbox v-model="letter.foldingMarks" @click="letter.foldingMarks=!letter.foldingMarks"></v-checkbox>
                 {{ $t('menu.foldingMarks') }}
-                <v-icon large color="accent" outlined>mdi-format-page-break</v-icon>
+                <v-icon right color="accent" outlined>mdi-format-page-break</v-icon>
               </v-btn>
               <v-spacer style="height: 10px;"></v-spacer>
               <v-select
@@ -149,11 +149,11 @@
           <v-row align="center" justify="space-around">
             <v-btn tile @click="print">
               {{ $t('menu.print') }}
-              <v-icon large color="accent">mdi-printer</v-icon>
+              <v-icon right color="accent">mdi-printer</v-icon>
             </v-btn>
             <v-btn tile @click="printToPdf">
               {{ $t('menu.export') }}
-              <v-icon large color="accent">mdi-file-pdf-outline</v-icon>
+              <v-icon right color="accent">mdi-file-pdf-box</v-icon>
             </v-btn>
           </v-row>
           <v-snackbar
@@ -349,6 +349,7 @@ export default {
 }
 
 @media print {
+
   @page  {
     size: A4;
     margin-left: 0cm;
@@ -361,12 +362,12 @@ export default {
 
   #sender {
     width: 80mm;
-    min-width: 80mm;
+    text-decoration: none !important;
     border-bottom: 1px solid;
+    padding-bottom: -10px !important;
     text-align: center;
     vertical-align: sub;
-    padding-bottom: 0px;
-    border-bottom: 0px;
+    outline: 3px solid limegreen !important;
   }
 
   #receiver {
@@ -394,8 +395,9 @@ export default {
 
   #date {
     margin-top: 4rem;
-    right: 0px;
+    right: 0.9cm !important;
     position: absolute;
+    outline: 3px solid limegreen !important;
   }
 
   #subject {

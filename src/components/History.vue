@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-btn tile @click="visible=true">
       {{ $t('menu.history') }}
-      <v-icon large color="accent">mdi-history</v-icon>
+      <v-icon right color="accent">mdi-history</v-icon>
     </v-btn>
     <v-dialog
         v-model="visible"

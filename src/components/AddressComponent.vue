@@ -437,5 +437,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .headline {
+    word-break: normal;
+  }
 </style>

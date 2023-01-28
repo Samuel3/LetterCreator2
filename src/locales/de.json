@@ -49,5 +49,8 @@
       "save": "Speichern",
       "delete": "Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?"
     }
+  },
+  "sender": {
+    "title": "Absender"
   }
 }

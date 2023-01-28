@@ -108,7 +108,6 @@ ipcMain.on('print-pdf', () => {
         pageSize: 'A4',
         printSelectionOnly: false,
         printBackground: false,
-        marginsType: 1
     }).then(data => {
         fs.writeFile(pdfPath, data, (error) => {
             if (error) throw error

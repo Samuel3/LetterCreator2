@@ -28,7 +28,7 @@ export default {
   methods: {
     changeLang(lang) {
       this.$i18n.locale = lang;
-      window.electronAPI.send("write","app.language", lang)
+      window.electronAPI.sendStringMessage("app.language", lang)
     },
     mounted: function () {
 

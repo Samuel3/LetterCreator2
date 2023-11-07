@@ -10,7 +10,6 @@ const path = require('path')
 const os = require('os')
 
 const Store = require('electron-store');
-
 const store = new Store();
 
 store.set('unicorn', '🦄');
@@ -77,8 +76,14 @@ app.on('activate', () => {
 ipcMain.on('write', (e, key, value) => {
     // console.log(arguments)
     console.log("Key: " + key + " Value: " + value)
+    console.log(arguments)
     store.set(key, value)
 })
+
+ipcMain.on('app.language', (event, lang) => {
+    console.log(lang)
+    store.set('app.language', lang)
+});
 
 // ipcMain.on('read', (e, key) => {
 //     console.log("Received read event for " + key)
@@ -99,6 +104,13 @@ app.on('ready', async () => {
         }
     }
     createWindow()
+})
+
+ipcMain.on('read-app-language', () => {
+    console.log("Read app language required")
+    let language = store.get("app.language", "de")
+    console.log("Sending lang: " + language)
+    win.webContents.send("app.language", language)
 })
 
 ipcMain.on('print-pdf', () => {

@@ -280,7 +280,7 @@ export default {
   },
 
   mounted() {
-    window.electronAPI.send('read', 'app.language')
+    window.electronAPI.sendPlain('read-app-language')
     window.electronAPI.on("print-pdf-path", (event, args) => {
       this.displayInfoMsg(`Printed to ${args}`)
     })
@@ -302,6 +302,9 @@ export default {
       let [day, month, year] = date.split(".")
       this.date = new Date(Date.parse(`${year}-${month}-${day}`)).toISOString().substr(0, 10)
       this.formattedDate = this.formatDate(this.date)
+    });
+    window.electronAPI.on('app.language', (event, language) => {
+      this.$i18n.locale = language
     });
   }
 };
